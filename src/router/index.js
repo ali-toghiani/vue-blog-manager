@@ -1,19 +1,54 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+
+import LoginView from '../views/LoginView.vue'
+import ArticlesView from '../views/ArticlesView.vue'
+import DashboardView from '@/views/DashboardView.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    redirect: '/login'
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/login',
+    name: 'Login',
+    component: LoginView
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/RegisterView.vue')
+  },
+  {
+    path: '/articles',
+    component: DashboardView,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'Articles',
+        component: ArticlesView,
+        props: { pageId: 1 },
+        // meta: { requiresAuth: true }
+      },
+      {
+        path: 'page/:pageId',
+        name: 'ArticlesPaginated',
+        component: ArticlesView,
+        props: true,
+        // meta: { requiresAuth: true }
+      },
+      {
+        path: 'create',
+        name: 'Create',
+        component: () => import('../views/ArticleCreateView.vue')
+      }
+    ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/pages/NotFound.vue')
   }
 ]
 
