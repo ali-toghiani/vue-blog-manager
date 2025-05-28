@@ -2,6 +2,7 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
+    <h1 class="text-red-500 h-[100vh]">asdasdf</h1>
   </nav>
   <router-view/>
 </template>
