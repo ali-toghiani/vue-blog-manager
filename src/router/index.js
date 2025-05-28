@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import LoginView from '../views/LoginView.vue'
-import ArticlesView from '../views/ArticlesView.vue'
-import DashboardView from '@/views/DashboardView.vue'
+import LoginView from '../pages/LoginView.vue'
+import ArticlesView from '../pages/ArticlesView.vue'
+import DashboardView from '@/pages/DashboardView.vue'
 
 const routes = [
   {
@@ -17,7 +17,7 @@ const routes = [
   {
     path: '/register',
     name: 'Register',
-    component: () => import('../views/RegisterView.vue')
+    component: () => import('../pages/RegisterView.vue')
   },
   {
     path: '/articles',
@@ -41,7 +41,7 @@ const routes = [
       {
         path: 'create',
         name: 'Create',
-        component: () => import('../views/ArticleCreateView.vue')
+        component: () => import('../pages/ArticleCreateView.vue')
       }
     ]
   },
