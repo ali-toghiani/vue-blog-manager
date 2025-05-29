@@ -1,14 +1,21 @@
 <template>
-  <button :class="buttonClasses">
+  <button :class="buttonClasses" :disabled="loading">
     <slot></slot>
+    <div v-if="loading" class="spinner mx-[10px]">
+      <spinner-icon/>
+    </div>
   </button>
 </template>
 
 <script>
+import SpinnerIcon from '@/assets/icons/SpinnerIcon.vue';
 import { computed } from 'vue';
 
 export default {
   name: 'app-button',
+  components: {
+    SpinnerIcon
+  },
   props: {
     loading: {
       type: Boolean,
@@ -47,7 +54,7 @@ export default {
 
 <style lang="postcss" scoped>
 .button {
-  @apply inline-block px-4 py-2 rounded-lg font-semibold text-[14px] w-full;
+  @apply inline-block px-4 py-2 rounded-lg font-semibold text-[14px] w-full flex justify-center items-center;
 }
 .button-green {
   @apply h-[40px] text-white;
@@ -80,6 +87,18 @@ export default {
   @apply bg-gray-100 text-gray-300 cursor-not-allowed;
 }
 .button--loading {
-  @apply opacity-75 cursor-wait;
+  @apply bg-green-100 cursor-wait !important;
+}
+
+.spinner svg {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
