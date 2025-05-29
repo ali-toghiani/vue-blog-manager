@@ -1,9 +1,13 @@
 import { createStore } from 'vuex'
 
 export default createStore({
-  state: {
-  },
+  state: () => ({
+    baseApi : process.env.VUE_APP_BASE_API_URL,
+  }),
   getters: {
+    baseApi(state){
+      return state.baseApi;
+    }
   },
   mutations: {
   },
