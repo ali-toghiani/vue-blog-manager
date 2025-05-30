@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
+import store  from '@/store';
 import LoginView from '../pages/LoginView.vue'
 import ArticlesView from '../pages/ArticlesView.vue'
 import DashboardView from '@/pages/DashboardView.vue'
@@ -55,6 +55,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to,from,next)=>{
+  const token = store.getters.token;
+  if (to.meta.requiresAuth && !token){
+    next('/login');
+  } else {
+    next();
+  }
 })
 
 export default router
