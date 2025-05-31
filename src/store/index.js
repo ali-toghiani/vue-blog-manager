@@ -1,16 +1,16 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
 
 export default createStore({
   state: () => ({
-    baseApi : process.env.VUE_APP_BASE_API_URL,
-    user: null
+    baseApi: process.env.VUE_APP_BASE_API_URL,
+    user: null,
   }),
   getters: {
-    baseApi(state){
+    baseApi(state) {
       return state.baseApi;
     },
     token(state) {
-      if (!state.user){
+      if (!state.user) {
         const localUserRaw = localStorage.getItem('user');
         const localUser = JSON.parse(localUserRaw);
         if (localUser) {
@@ -19,18 +19,20 @@ export default createStore({
       }
       return state.user.token;
     },
-    userName(state){
+    userName(state) {
       return state.user.username;
-    }
+    },
   },
   mutations: {
-    setUser(context, payload){
+    setUser(context, payload) {
       localStorage.setItem('user', JSON.stringify(payload));
       context.user = payload;
-    }
+    },
+    clearUser(context) {
+      localStorage.removeItem('user');
+      context.user = null;
+    },
   },
-  actions: {
-  },
-  modules: {
-  }
-})
+  actions: {},
+  modules: {},
+});
