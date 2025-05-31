@@ -27,11 +27,11 @@ export default defineComponent({
     },
   },
   emits: ['select'],
-  setup(props, { emit }) {
+  setup(props, context) {
     const router = useRouter();
 
     const handleItemClick = (item) => {
-      emit('select', item.key);
+      context.emit('select', item.key);
       if (item.path) {
         router.push(item.path);
       }
