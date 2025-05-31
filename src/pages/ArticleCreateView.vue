@@ -70,16 +70,17 @@
 </template>
 
 <script>
+  import { useStore } from 'vuex';
+  import { reactive, ref } from 'vue';
+  import { toast } from 'vue3-toastify';
+  import axios from 'axios';
+
   import AppButton from '@/components/AppButton.vue';
   import AppFormField from '@/components/AppFormField.vue';
   import AppWidget from '@/components/AppWidget.vue';
   import AppArticleTagsView from '@/pages/ArticleTagsView.vue';
-  import axios from 'axios';
-  import { reactive, ref } from 'vue';
-  import { useStore } from 'vuex';
-  import { toast } from 'vue3-toastify';
+  
   export default {
-    name: 'app-article-create-view',
     components: {
       AppWidget,
       AppFormField,
