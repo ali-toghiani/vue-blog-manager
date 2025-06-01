@@ -1,6 +1,6 @@
 <template>
   <section class="new-article-divider grid grid-cols-[2fr_1fr] gap-x-6 w-full">
-    <app-widget title="New Article">
+    <app-widget :title="isEditing ? 'Edit Article': 'Create Article'">
       <form
         class="p-6"
         @submit.prevent="submitForm"
@@ -15,6 +15,7 @@
             class="text-[14px]"
             type="text"
             id="title"
+            :disabled="isEditing"
             placeholder="Title"
             v-model="form.title"
             @blur="validateForm"
@@ -58,20 +59,20 @@
           :loading="isLoading"
           :disabled="isLoading"
         >
-          Submit
+          {{isEditing ? 'Save' : 'Submit'}}
         </app-button>
       </form>
     </app-widget>
 
-    <app-article-tags-view
+    <app-article-tags-view :initialTags="form.tagList"
       @update:selectedTags="handleSelectedTags"
     ></app-article-tags-view>
   </section>
 </template>
 
 <script>
+  import { reactive, ref, onMounted } from 'vue';
   import { useStore } from 'vuex';
-  import { reactive, ref } from 'vue';
   import { toast } from 'vue3-toastify';
   import axios from 'axios';
 
@@ -87,7 +88,15 @@
       AppButton,
       AppArticleTagsView,
     },
-    setup() {
+    props: {
+      isEditing: {
+        type: Boolean
+      },
+      slug: {
+        type: String
+      }
+    },
+    setup(props) {
       const isLoading = ref(false);
       const store = useStore();
 
@@ -108,6 +117,28 @@
         form.tagList = tags;
       }
 
+      onMounted(()=>{
+        if (props.slug){
+          fetchArticle(props.slug)
+        }
+      })
+
+      async function fetchArticle(slug){
+        isLoading.value = true;
+        try{
+          const response = await axios.get(`${store.getters.baseApi}/articles/${slug}`,{
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                Authorization: `Token ${store.getters.token}`,
+              })
+              Object.assign(form, response.data.article);
+              return {success: true, data: response.data};
+        } catch(error){
+          console.error("Fetching Article By Slug Failed");
+        } finally {
+          isLoading.value = false;
+        }
+      }
       const validateForm = () => {
         let isValid = true;
         errors.title = '';
@@ -129,8 +160,43 @@
         return isValid;
       };
 
+      async function editArticle(slug){
+        try {
+          isLoading.value = true;
+          const response = await axios.put(
+            `${store.getters.baseApi}/articles/${slug}`,
+            {
+              article: form,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                Authorization: `Token ${store.getters.token}`,
+              },
+            }
+          );
+          toast.success('Article Edited Successfully!');
+          resetForm();
+          return { success: true, data: response.data };
+        } catch (error) {
+          toast.success('Article Edit Failed!');
+          if (error.response) {
+            return { success: false, errors: error.response.data.errors || {} };
+          }
+          throw new Error('Network error occurred');
+        } finally {
+          isLoading.value = false;
+        }
+      }
+
       async function submitForm() {
         if (!validateForm()) return;
+
+        if (props.slug){
+          editArticle(props.slug);
+          return;
+        }
         try {
           isLoading.value = true;
           const response = await axios.post(
