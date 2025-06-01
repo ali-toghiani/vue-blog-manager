@@ -1,7 +1,11 @@
 <template>
-  <app-widget title="All Posts">
+  <app-widget
+    class="m-4 md:m-0"
+    title="All Posts"
+  >
     <div class="table-container p-6 flex flex-col items-end overflow-x-auto">
-      <table class="article-table w-full">
+      <!-- Desktop table -->
+      <table class="article-table w-full hidden md:table">
         <thead>
           <tr class="bg-gray-300 h-[40px] py-1">
             <th>#</th>
@@ -66,8 +70,72 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- Mobile table -->
+      <div class="md:hidden space-y-4 p-4">
+        <div
+          v-for="(article, index) in paginatedArticles"
+          :key="index"
+          class="border rounded-lg p-4 bg-white shadow-sm"
+        >
+          <div class="flex justify-between items-start">
+            <div class="flex items-center space-x-2">
+              <div
+                class="order-container rounded-sm bg-gray-100 w-[32px] h-[32px] flex justify-center items-center"
+              >
+                {{ index + 1 }}
+              </div>
+              <strong
+                class="font-semibold title-cell truncate"
+                :title="article.title || 'No title'"
+              >
+                {{ article.title }}
+              </strong>
+            </div>
+            <div class="dropdown">
+              <app-button
+                color="transparent"
+                class="!w-[32px] !h-[32px] !p-[6px]"
+              >
+                <dots-icon />
+              </app-button>
+              <app-menu
+                @select="handleMenuClick($event, article.slug)"
+                class="dropdown-content"
+                :items="contextMenuItems"
+              ></app-menu>
+            </div>
+          </div>
+          <div class="mt-2 text-sm text-gray-600">
+            <p>
+              <span class="font-medium">Author:</span>
+              {{ article.author.username }}
+            </p>
+            <p>
+              <span class="font-medium">Created:</span>
+              {{ formatDate(article.createdAt) }}
+            </p>
+            <div class="mt-1">
+              <span class="font-medium">Tags:</span>
+              <app-link-button
+                v-for="tag in article.tagList"
+                :key="tag"
+                :path="'/articles?=' + tag"
+                class="inline-block mr-1"
+              >
+                #{{ tag }}
+              </app-link-button>
+            </div>
+            <p class="mt-1">
+              <span class="font-medium">Excerpt:</span>
+              {{ formatBody(article.body) }}
+            </p>
+          </div>
+        </div>
+      </div>
+
       <app-pagination
-      class="mt-6"
+        class="mt-6"
         @pageChanged="handlePageChange"
         :page-size="articlePageSize"
         :total="articlesCount"
@@ -153,7 +221,10 @@
         const pageId = parseInt(route.params.pageId) || 1;
         return Math.max(
           1,
-          Math.min(pageId, Math.ceil(articlesCount.value / articlePageSize.value))
+          Math.min(
+            pageId,
+            Math.ceil(articlesCount.value / articlePageSize.value)
+          )
         );
       });
 
@@ -165,7 +236,7 @@
       const articles = ref([]);
       const articlesCount = ref(10);
       const articlePageSize = ref(2);
-      
+
       const isLoading = ref(false);
       const error = ref(null);
       const contextMenuItems = [
@@ -182,7 +253,6 @@
       const deleteIsLoading = ref(false);
       const itemToDelete = ref('');
       const showDeleteModal = ref(false);
-      
 
       async function fetchArticles() {
         try {
@@ -239,21 +309,23 @@
         itemToDelete.value = item;
       }
 
-      function handleMenuClick(event, slug){
-        switch(event){
-          case('edit'):{
-            redirectToEdit(slug);
-          }
-          break;
-          case('delete'):{
-            setItemToDelete(slug)
-          }
-          break;
+      function handleMenuClick(event, slug) {
+        switch (event) {
+          case 'edit':
+            {
+              redirectToEdit(slug);
+            }
+            break;
+          case 'delete':
+            {
+              setItemToDelete(slug);
+            }
+            break;
         }
       }
 
-      function redirectToEdit(slug){
-        router.push(`/articles/edit/${slug}`)
+      function redirectToEdit(slug) {
+        router.push(`/articles/edit/${slug}`);
       }
 
       function formatDate(dateString) {
@@ -301,15 +373,15 @@
   }
 
   .title-cell {
-    @apply max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap
+    @apply max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap;
   }
 
   .title-cell strong.truncate {
-    @apply block overflow-hidden text-ellipsis whitespace-nowrap
+    @apply block overflow-hidden text-ellipsis whitespace-nowrap;
   }
 
   .dropdown {
-    @apply relative inline-block
+    @apply relative inline-block;
   }
 
   .dropdown:hover .dropdown-content {
