@@ -60,14 +60,15 @@
 </template>
 
 <script>
+  import { reactive, ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { useStore } from 'vuex';
+  import { toast } from 'vue3-toastify';
+  import axios from 'axios';
+  
   import AppButton from '@/components/AppButton.vue';
   import AppFormField from '@/components/AppFormField.vue';
   import AppLinkButton from '@/components/AppLinkButton.vue';
-  import axios from 'axios';
-  import { reactive, ref } from 'vue';
-  import { useRouter } from 'vue-router';
-import { toast } from 'vue3-toastify';
-  import { useStore } from 'vuex';
 
   export default {
     name: 'app-login-view',
@@ -141,6 +142,7 @@ import { toast } from 'vue3-toastify';
             toast.success(`Welcome ${user.username}`)
             router.push('/articles');
           } else {
+            toast.error("Email or Password is Invalid")
             Object.assign(errors, response.errors);
           }
         } catch (error) {
