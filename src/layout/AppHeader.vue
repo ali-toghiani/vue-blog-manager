@@ -1,6 +1,7 @@
 <template>
   <header
-    class="w-full h-[64px] bg-white flex justify-center md:justify-between items-center border-b border-gray-500 px-[24px]"
+    class="w-full h-[64px] bg-white border-b border-gray-500 px-[24px] sticky md:static top-0
+           flex justify-center md:justify-between items-center"
   >
     <div class="welcome text-[14px] font-normal hidden md:block">
       welcome

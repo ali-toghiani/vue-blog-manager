@@ -1,5 +1,8 @@
 <template>
-  <section class="new-article-divider grid grid-cols-[2fr_1fr] gap-x-6 w-full">
+  <section class="new-article-divider w-full
+                  flex flex-col justify-center p-4 gap-y-4
+                  gap-x-6
+                  md:grid md:grid-cols-[2fr_1fr]">
     <app-widget :title="isEditing ? 'Edit Article': 'Create Article'">
       <form
         class="p-6"
