@@ -3,7 +3,7 @@
     class="register-container w-full h-[100vh] bg-neutral-300 flex justify-center items-center"
   >
     <div
-      class="formcontainer bg-neutral-100 flex flex-col items-start w-full max-w-[480px] rounded-[10px]"
+      class="formcontainer bg-neutral-100 flex flex-col items-start w-full max-w-[90%] md:max-w-[480px] rounded-[10px]"
     >
       <h2 class="text-[18px] font-semibold px-[24px] py-[38px]">Sign up</h2>
 
