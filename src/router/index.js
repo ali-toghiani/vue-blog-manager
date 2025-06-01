@@ -39,7 +39,19 @@ const routes = [
       {
         path: 'create',
         name: 'Create',
-        component: () => import('../pages/ArticleCreateView.vue')
+        component: () => import('../pages/ArticleCreateView.vue'),
+        props: {
+          isEditing: false
+        }
+      },
+      {
+        path: 'edit/:slug',
+        name: 'Edit',
+        component: () => import('../pages/ArticleCreateView.vue'),
+        props: (route) => ({
+          isEditing: true,
+          slug: route.params.slug
+        })
       }
     ]
   },
