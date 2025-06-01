@@ -44,7 +44,7 @@
   import AppFormField from '@/components/AppFormField.vue';
 
   import axios from 'axios';
-  import { computed, onMounted, ref, watch } from 'vue';
+  import { computed, onMounted, onUpdated, ref, watch } from 'vue';
   import { useStore } from 'vuex';
 
   export default {
@@ -52,6 +52,17 @@
     components: {
       AppFormField,
       AppCheckbox,
+    },
+    props: {
+      initialTags: {
+        type: Array,
+        default: () => [],
+        validator: (arr) => arr.every((item) => typeof item === 'string'),
+      },
+      isEditing: {
+        type: Boolean,
+        default: false
+      }
     },
     
     setup(props, context) {
@@ -82,6 +93,15 @@
         },
         { deep: true }
       );
+
+      watch(
+        props.initialTags,
+        () => {
+          console.log("**",props.initialTags);
+          tagList.value = [...props.initialTags];
+          selectedTags.value = [...props.initialTags];
+        }
+      )
 
       async function fetchTags() {
         try {
@@ -127,8 +147,17 @@
       }
 
       onMounted(() => {
-        fetchTags();
+        if (!props.isEditing && props.initialTags.length === 0) {
+          fetchTags();
+        }
       });
+      
+      onUpdated(()=>{
+      if (tagList.value.length == 0) {
+        tagList.value = [...props.initialTags];
+        selectedTags.value = [...props.initialTags];
+      }
+      })
       return {
         newTag,
         tagError,

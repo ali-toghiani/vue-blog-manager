@@ -59,13 +59,13 @@
           :loading="isLoading"
           :disabled="isLoading"
         >
-          {{isEditing ? 'Save' : 'Submit'}}
+          {{isEditing ? 'Save Changes' : 'Submit'}}
         </app-button>
       </form>
     </app-widget>
 
-    <app-article-tags-view :initialTags="form.tagList"
-      @update:selectedTags="handleSelectedTags"
+    <app-article-tags-view :initialTags="initialTags" :isEditing="isEditing"
+      @update:selectedTags="updateSelectedTags"
     ></app-article-tags-view>
   </section>
 </template>
@@ -112,8 +112,9 @@
         body: '',
         tagList: [],
       });
+      const initialTags = ref([])
 
-      function handleSelectedTags(tags) {
+      function updateSelectedTags(tags) {
         form.tagList = tags;
       }
 
@@ -132,6 +133,7 @@
                 Authorization: `Token ${store.getters.token}`,
               })
               Object.assign(form, response.data.article);
+              initialTags.value = [...response.data.article.tagList];
               return {success: true, data: response.data};
         } catch(error){
           console.error("Fetching Article By Slug Failed");
@@ -246,7 +248,8 @@
         isLoading,
         submitForm,
         validateForm,
-        handleSelectedTags,
+        updateSelectedTags,
+        initialTags
       };
     },
   };
