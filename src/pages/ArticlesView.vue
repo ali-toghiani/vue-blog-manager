@@ -57,7 +57,7 @@
                   <dots-icon />
                 </app-button>
                 <app-menu
-                  @select="setItemToDelete(article.slug)"
+                  @select="handleMenuClick($event, article.slug)"
                   class="dropdown-content"
                   :items="contextMenuItems"
                 ></app-menu>
@@ -256,6 +256,23 @@
         itemToDelete.value = item;
       }
 
+      function handleMenuClick(event, slug){
+        switch(event){
+          case('edit'):{
+            redirectToEdit(slug);
+          }
+          break;
+          case('delete'):{
+            setItemToDelete(slug)
+          }
+          break;
+        }
+      }
+
+      function redirectToEdit(slug){
+        router.push(`/articles/edit/${slug}`)
+      }
+
       function formatDate(dateString) {
         if (!dateString) return 'Unknown';
         const date = new Date(dateString);
@@ -289,6 +306,7 @@
         handlePageChange,
         paginatedArticles,
         articlePageSize,
+        handleMenuClick,
       };
     },
   };
