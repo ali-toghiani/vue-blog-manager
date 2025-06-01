@@ -1,9 +1,8 @@
 <template>
-  <section class="new-article-divider w-full
-                  flex flex-col justify-center p-4 gap-y-4
-                  gap-x-6
-                  md:grid md:grid-cols-[2fr_1fr]">
-    <app-widget :title="isEditing ? 'Edit Article': 'Create Article'">
+  <section
+    class="new-article-divider w-full flex flex-col justify-center p-4 md:p-0 gap-y-4 gap-x-6 md:grid md:grid-cols-[2fr_1fr]"
+  >
+    <app-widget :title="isEditing ? 'Edit Article' : 'Create Article'">
       <form
         class="p-6"
         @submit.prevent="submitForm"
@@ -62,12 +61,14 @@
           :loading="isLoading"
           :disabled="isLoading"
         >
-          {{isEditing ? 'Save Changes' : 'Submit'}}
+          {{ isEditing ? 'Save Changes' : 'Submit' }}
         </app-button>
       </form>
     </app-widget>
 
-    <app-article-tags-view :initialTags="initialTags" :isEditing="isEditing"
+    <app-article-tags-view
+      :initialTags="initialTags"
+      :isEditing="isEditing"
       @update:selectedTags="updateSelectedTags"
     ></app-article-tags-view>
   </section>
@@ -81,7 +82,7 @@
   import AppFormField from '@/components/AppFormField.vue';
   import AppWidget from '@/components/AppWidget.vue';
   import AppArticleTagsView from '@/pages/ArticleTagsView.vue';
-  
+
   export default {
     components: {
       AppWidget,
@@ -91,11 +92,11 @@
     },
     props: {
       isEditing: {
-        type: Boolean
+        type: Boolean,
       },
       slug: {
-        type: String
-      }
+        type: String,
+      },
     },
     setup(props) {
       const { appContext } = getCurrentInstance();
@@ -115,28 +116,28 @@
         body: '',
         tagList: [],
       });
-      const initialTags = ref([])
+      const initialTags = ref([]);
 
       function updateSelectedTags(tags) {
         form.tagList = tags;
       }
 
-      onMounted(()=>{
-        if (props.slug){
-          fetchArticle(props.slug)
+      onMounted(() => {
+        if (props.slug) {
+          fetchArticle(props.slug);
         }
-      })
+      });
 
-      async function fetchArticle(slug){
+      async function fetchArticle(slug) {
         isLoading.value = true;
-        try{
+        try {
           const response = await $http.get(`/articles/${slug}`);
 
-              Object.assign(form, response.data.article);
-              initialTags.value = [...response.data.article.tagList];
-              return {success: true, data: response.data};
-        } catch(error){
-          console.error("Fetching Article By Slug Failed");
+          Object.assign(form, response.data.article);
+          initialTags.value = [...response.data.article.tagList];
+          return { success: true, data: response.data };
+        } catch (error) {
+          console.error('Fetching Article By Slug Failed');
         } finally {
           isLoading.value = false;
         }
@@ -162,10 +163,12 @@
         return isValid;
       };
 
-      async function editArticle(slug){
+      async function editArticle(slug) {
         try {
           isLoading.value = true;
-          const response = await $http.put(`/articles/${slug}`,{ article: form });
+          const response = await $http.put(`/articles/${slug}`, {
+            article: form,
+          });
 
           toast.success('Article Edited Successfully!');
           resetForm();
@@ -184,7 +187,7 @@
       async function submitForm() {
         if (!validateForm()) return;
 
-        if (props.slug){
+        if (props.slug) {
           editArticle(props.slug);
           return;
         }
@@ -226,7 +229,7 @@
         submitForm,
         validateForm,
         updateSelectedTags,
-        initialTags
+        initialTags,
       };
     },
   };
