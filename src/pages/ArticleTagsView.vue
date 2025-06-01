@@ -61,10 +61,10 @@
       },
       isEditing: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
-    
+
     setup(props, context) {
       const isLoading = ref(false);
       const store = useStore();
@@ -85,7 +85,6 @@
         }
       };
 
-
       watch(
         selectedTags,
         (newTags) => {
@@ -94,14 +93,11 @@
         { deep: true }
       );
 
-      watch(
-        props.initialTags,
-        () => {
-          console.log("**",props.initialTags);
-          tagList.value = [...props.initialTags];
-          selectedTags.value = [...props.initialTags];
-        }
-      )
+      watch(props.initialTags, () => {
+        console.log('**', props.initialTags);
+        tagList.value = [...props.initialTags];
+        selectedTags.value = [...props.initialTags];
+      });
 
       async function fetchTags() {
         try {
@@ -151,13 +147,13 @@
           fetchTags();
         }
       });
-      
-      onUpdated(()=>{
-      if (tagList.value.length == 0) {
-        tagList.value = [...props.initialTags];
-        selectedTags.value = [...props.initialTags];
-      }
-      })
+
+      onUpdated(() => {
+        if (tagList.value.length == 0) {
+          tagList.value = [...props.initialTags];
+          selectedTags.value = [...props.initialTags];
+        }
+      });
       return {
         newTag,
         tagError,
@@ -166,7 +162,7 @@
         sortedTags,
         addNewTag,
         resetError,
-        updateTag
+        updateTag,
       };
     },
   };

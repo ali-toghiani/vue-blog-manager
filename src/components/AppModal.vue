@@ -31,7 +31,9 @@
 
 <script>
   import { ref } from 'vue';
-  import AppButton from './AppButton.vue';
+
+  import AppButton from '@/components/AppButton.vue';
+
   export default {
     props: {
       title: {

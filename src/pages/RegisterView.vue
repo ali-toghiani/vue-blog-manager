@@ -74,11 +74,11 @@
   import { reactive, ref } from 'vue';
   import { useRouter } from 'vue-router';
   import { useStore } from 'vuex';
+  import axios from 'axios';
 
   import AppButton from '@/components/AppButton.vue';
   import AppFormField from '@/components/AppFormField.vue';
   import AppLinkButton from '@/components/AppLinkButton.vue';
-  import axios from 'axios';
 
   export default {
     name: 'app-register-view',

@@ -117,6 +117,7 @@
 
 <script>
   import { computed, onMounted, ref } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
   import { useStore } from 'vuex';
   import { toast } from 'vue3-toastify';
   import axios from 'axios';
@@ -130,7 +131,6 @@
 
   import WarningIcon from '@/assets/icons/WarningIcon.vue';
   import DotsIcon from '@/assets/icons/DotsIcon.vue';
-  import { useRoute, useRouter } from 'vue-router';
 
   export default {
     name: 'app-articles-view',

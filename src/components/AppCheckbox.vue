@@ -60,14 +60,14 @@
       label: {
         type: String,
         default: '',
-      }
+      },
     },
-    setup(props, context){
-      function updateCheckbox(event){
+    setup(props, context) {
+      function updateCheckbox(event) {
         context.emit('update:modelValue', event.target.checked);
       }
-      return {updateCheckbox}
-    }
+      return { updateCheckbox };
+    },
   };
 </script>
 

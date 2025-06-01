@@ -9,14 +9,14 @@
 </template>
 
 <script>
-import AppHeader from '@/layout/AppHeader.vue';
-import AppSidebar from '@/layout/AppSidebar.vue';
+  import AppHeader from '@/layout/AppHeader.vue';
+  import AppSidebar from '@/layout/AppSidebar.vue';
 
-export default {
-  name: 'app-dashaobrd-view',
-  components: {
-    AppHeader,
-    AppSidebar
-  }
-}
-</script> 
+  export default {
+    name: 'app-dashaobrd-view',
+    components: {
+      AppHeader,
+      AppSidebar,
+    },
+  };
+</script>

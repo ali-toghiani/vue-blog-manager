@@ -1,104 +1,113 @@
 <template>
-  <button :class="buttonClasses" :disabled="loading">
+  <button
+    :class="buttonClasses"
+    :disabled="loading"
+  >
     <slot></slot>
-    <div v-if="loading" class="spinner mx-[10px]">
-      <spinner-icon/>
+    <div
+      v-if="loading"
+      class="spinner mx-[10px]"
+    >
+      <spinner-icon />
     </div>
   </button>
 </template>
 
 <script>
-import SpinnerIcon from '@/assets/icons/SpinnerIcon.vue';
-import { computed } from 'vue';
+  import { computed } from 'vue';
+  
+  import SpinnerIcon from '@/assets/icons/SpinnerIcon.vue';
 
-export default {
-  name: 'app-button',
-  components: {
-    SpinnerIcon
-  },
-  props: {
-    loading: {
-      type: Boolean,
-      default: false,
+  export default {
+    name: 'app-button',
+    components: {
+      SpinnerIcon,
     },
-    disabled: {
-      type: Boolean,
-      default: false
+    props: {
+      loading: {
+        type: Boolean,
+        default: false,
+      },
+      disabled: {
+        type: Boolean,
+        default: false,
+      },
+      shade: {
+        type: String,
+        default: 'base',
+        validator: (value) => ['base', 'dark', 'deep'].includes(value),
+      },
+      color: {
+        type: String,
+        default: 'green',
+        validator: (value) => ['green', 'red', 'transparent'].includes(value),
+      },
     },
-    shade: {
-      type: String,
-      default: 'base',
-      validator: (value) => ['base', 'dark', 'deep'].includes(value)
+    setup(props) {
+      const buttonClasses = computed(() => ({
+        button: true,
+        [`button-${props.color}`]: true,
+        [`button-${props.color}-${props.shade}`]:
+          props.color !== 'black-outline' && !props.disabled,
+        'button--disabled': props.disabled,
+        'button--loading': props.loading,
+        'button-black-outline':
+          props.color === 'black-outline' && !props.disabled,
+      }));
+      return {
+        buttonClasses,
+      };
     },
-    color: {
-      type: String,
-      default: 'green',
-      validator: (value) => ['green', 'red', 'transparent'].includes(value)
-    }
-  },
-  setup(props) {
-    const buttonClasses = computed(() => ({
-      'button': true,
-      [`button-${props.color}`]: true,
-      [`button-${props.color}-${props.shade}`]: props.color !== 'black-outline' && !props.disabled,
-      'button--disabled': props.disabled,
-      'button--loading': props.loading,
-      'button-black-outline': props.color === 'black-outline' && !props.disabled,
-    }));
-    return {
-      buttonClasses
-    }
-  }
-}
+  };
 </script>
 
 <style lang="postcss" scoped>
-.button {
-  @apply inline-block px-4 py-2 rounded-lg font-semibold text-[14px] w-full flex justify-center items-center;
-}
-.button-green {
-  @apply h-[40px] text-white;
-}
-.button-green-base {
-  @apply bg-green-300 hover:bg-green-300;
-}
-.button-green-dark {
-  @apply bg-green-500 hover:bg-green-500;
-}
-.button-green-deep {
-  @apply bg-green-700 hover:bg-green-700;
-}
-.button-red {
-  @apply text-white;
-}
-.button-red-base {
-  @apply bg-red-300 hover:bg-red-300;
-}
-.button-red-dark {
-  @apply bg-red-500 hover:bg-red-500;
-}
-.button-red-deep {
-  @apply bg-red-700 hover:bg-red-700;
-}
-.button-transparent {
-  @apply bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100;
-}
-.button--disabled {
-  @apply bg-gray-100 text-gray-300 cursor-not-allowed;
-}
-.button--loading {
-  @apply bg-green-100 cursor-wait !important;
-}
+  .button {
+    @apply inline-block px-4 py-2 rounded-lg font-semibold text-[14px] w-full flex justify-center items-center;
+  }
+  .button-green {
+    @apply h-[40px] text-white;
+  }
+  .button-green-base {
+    @apply bg-green-300 hover:bg-green-300;
+  }
+  .button-green-dark {
+    @apply bg-green-500 hover:bg-green-500;
+  }
+  .button-green-deep {
+    @apply bg-green-700 hover:bg-green-700;
+  }
+  .button-red {
+    @apply text-white;
+  }
+  .button-red-base {
+    @apply bg-red-300 hover:bg-red-300;
+  }
+  .button-red-dark {
+    @apply bg-red-500 hover:bg-red-500;
+  }
+  .button-red-deep {
+    @apply bg-red-700 hover:bg-red-700;
+  }
+  .button-transparent {
+    @apply bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100;
+  }
+  .button--disabled {
+    @apply bg-gray-100 text-gray-300 cursor-not-allowed;
+  }
+  .button--loading {
+    @apply bg-green-100 cursor-wait !important;
+  }
 
-.spinner svg {
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+  .spinner svg {
+    animation: spin 1s linear infinite;
   }
-  to {
-    transform: rotate(360deg);
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
-}
 </style>

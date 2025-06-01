@@ -22,10 +22,11 @@
 </template>
 
 <script>
-  import AppButton from '@/components/AppButton.vue';
   import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+  import { useRouter } from 'vue-router';
   import { useStore } from 'vuex';
+
+  import AppButton from '@/components/AppButton.vue';
 
   export default {
     name: 'app-header',
@@ -37,13 +38,13 @@ import { useRouter } from 'vue-router';
       const router = useRouter();
       const userName = ref(store.getters.userName);
 
-      function handleLogout(){
+      function handleLogout() {
         store.commit('clear-user');
         router.push('/login');
       }
       return {
         userName,
-        handleLogout
+        handleLogout,
       };
     },
   };

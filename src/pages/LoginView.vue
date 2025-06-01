@@ -65,7 +65,7 @@
   import { useStore } from 'vuex';
   import { toast } from 'vue3-toastify';
   import axios from 'axios';
-  
+
   import AppButton from '@/components/AppButton.vue';
   import AppFormField from '@/components/AppFormField.vue';
   import AppLinkButton from '@/components/AppLinkButton.vue';
@@ -139,10 +139,10 @@
           if (response.success) {
             const { user } = response.data;
             store.commit('setUser', user);
-            toast.success(`Welcome ${user.username}`)
+            toast.success(`Welcome ${user.username}`);
             router.push('/articles');
           } else {
-            toast.error("Email or Password is Invalid")
+            toast.error('Email or Password is Invalid');
             Object.assign(errors, response.errors);
           }
         } catch (error) {

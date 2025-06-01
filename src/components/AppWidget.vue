@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import AppReplacer from './AppReplacer.vue';
+  import AppReplacer from '@/components/AppReplacer.vue';
 
   export default {
     name: 'app-widget',
