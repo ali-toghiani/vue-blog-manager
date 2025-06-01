@@ -1,6 +1,6 @@
 <template>
   <app-widget title="All Posts">
-    <div class="table-container p-6 flex flex-col items-end">
+    <div class="table-container p-6 flex flex-col items-end overflow-x-auto">
       <table class="article-table w-full">
         <thead>
           <tr class="bg-gray-300 h-[40px] py-1">
@@ -16,7 +16,7 @@
         <tbody>
           <tr
             class="h-[48px] border-b"
-            v-for="(article, index) in articles"
+            v-for="(article, index) in paginatedArticles"
             :key="index"
           >
             <td>
@@ -67,8 +67,10 @@
         </tbody>
       </table>
       <app-pagination
-        class="mt-6"
-        :total="100"
+      class="mt-6"
+        @pageChanged="handlePageChange"
+        :page-size="articlePageSize"
+        :total="articlesCount"
       ></app-pagination>
     </div>
   </app-widget>
@@ -114,7 +116,7 @@
 </template>
 
 <script>
-  import { onMounted, ref } from 'vue';
+  import { computed, onMounted, ref } from 'vue';
   import { useStore } from 'vuex';
   import { toast } from 'vue3-toastify';
   import axios from 'axios';
@@ -128,6 +130,7 @@
 
   import WarningIcon from '@/assets/icons/WarningIcon.vue';
   import DotsIcon from '@/assets/icons/DotsIcon.vue';
+  import { useRoute, useRouter } from 'vue-router';
 
   export default {
     name: 'app-articles-view',
@@ -143,11 +146,27 @@
     },
     setup() {
       const store = useStore();
+      const router = useRouter();
+      const route = useRoute();
+
+      const currentPage = computed(() => {
+        const pageId = parseInt(route.params.pageId) || 1;
+        return Math.max(
+          1,
+          Math.min(pageId, Math.ceil(articlesCount.value / articlePageSize.value))
+        );
+      });
+
+      const paginatedArticles = computed(() => {
+        const start = (currentPage.value - 1) * articlePageSize.value;
+        const end = start + articlePageSize.value;
+        return articles.value.slice(start, end);
+      });
       const articles = ref([]);
+      const articlesCount = ref(10);
+      const articlePageSize = ref(2);
+      
       const isLoading = ref(false);
-      const deleteIsLoading = ref(false);
-      const itemToDelete = ref('');
-      const showDeleteModal = ref(false);
       const error = ref(null);
       const contextMenuItems = [
         {
@@ -159,6 +178,11 @@
           key: 'delete',
         },
       ];
+
+      const deleteIsLoading = ref(false);
+      const itemToDelete = ref('');
+      const showDeleteModal = ref(false);
+      
 
       async function fetchArticles() {
         try {
@@ -175,12 +199,13 @@
             }
           );
           articles.value = response.data.articles || response.data || [];
+          articlesCount.value = response.data.articlesCount;
           return { success: true, data: response.data };
         } catch (error) {
           if (error.response) {
             return { success: false, errors: error.response.data.errors || {} };
           }
-          throw new Error('Network error occurred');
+          throw new Error('Fetching Articles Failed');
         } finally {
           isLoading.value = false;
         }
@@ -207,7 +232,7 @@
           if (error.response) {
             return { success: false, errors: error.response.data.errors || {} };
           }
-          throw new Error('Network error occurred');
+          throw new Error('Article Deletion Failed');
         } finally {
           isLoading.value = false;
         }
@@ -216,6 +241,14 @@
       function closeDeleteModal() {
         showDeleteModal.value = false;
         itemToDelete.value = '';
+      }
+
+      function handlePageChange(page) {
+        if (page == '1') {
+          router.push('/articles');
+        } else {
+          router.push(`/articles/page/${page}`);
+        }
       }
 
       function setItemToDelete(item) {
@@ -252,6 +285,10 @@
         handleDelete,
         setItemToDelete,
         closeDeleteModal,
+        articlesCount,
+        handlePageChange,
+        paginatedArticles,
+        articlePageSize,
       };
     },
   };
@@ -262,30 +299,19 @@
     @apply text-[18px] font-semibold px-[18px] text-start;
   }
 
-  .table-container {
-    overflow-x: auto;
-  }
-
   .title-cell {
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    @apply max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap
   }
 
   .title-cell strong.truncate {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    @apply block overflow-hidden text-ellipsis whitespace-nowrap
   }
 
   .dropdown {
-    position: relative;
-    display: inline-block;
+    @apply relative inline-block
   }
 
   .dropdown:hover .dropdown-content {
-    display: block;
+    @apply block;
   }
 </style>
