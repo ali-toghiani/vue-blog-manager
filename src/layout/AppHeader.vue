@@ -1,8 +1,8 @@
 <template>
   <header
-    class="w-full md:h-[64px] bg-white flex justify-between items-center border-b border-gray-500 px-[24px]"
+    class="w-full h-[64px] bg-white flex justify-center md:justify-between items-center border-b border-gray-500 px-[24px]"
   >
-    <div class="welcome text-[14px] font-normal">
+    <div class="welcome text-[14px] font-normal hidden md:block">
       welcome
       <strong class="font-semibold">
         {{ userName }}
@@ -11,13 +11,16 @@
     <div class="text-[16px] font-semibold py-2 px-3 bg-gray-100 rounded-sm">
       Arvancloud Challenge
     </div>
-    <app-button
-      class="!w-fit h-[40px]"
-      color="transparent"
-      @click="handleLogout"
-    >
-      Log out
-    </app-button>
+
+      <span class="hidden md:block">
+        <app-button
+          class="!w-fit h-[40px]"
+          color="transparent"
+          @click="handleLogout"
+        >
+          Log out
+      </app-button>
+    </span>
   </header>
 </template>
 
