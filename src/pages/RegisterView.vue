@@ -71,10 +71,9 @@
 </template>
 
 <script>
-  import { reactive, ref } from 'vue';
+  import { reactive, ref, getCurrentInstance } from 'vue';
   import { useRouter } from 'vue-router';
   import { useStore } from 'vuex';
-  import axios from 'axios';
 
   import AppButton from '@/components/AppButton.vue';
   import AppFormField from '@/components/AppFormField.vue';
@@ -88,6 +87,9 @@
       AppLinkButton,
     },
     setup() {
+      const { appContext } = getCurrentInstance();
+      const $http = appContext.config.globalProperties.$http;
+
       const store = useStore();
       const router = useRouter();
       const isLoading = ref(false);
@@ -126,18 +128,8 @@
 
       async function registerUser(body) {
         try {
-          const response = await axios.post(
-            `${store.getters.baseApi}/users`,
-            {
-              user: body,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-              },
-            }
-          );
+          const response = await $http.post(`/users`, { user: body });
+          
           return { success: true, data: response.data };
         } catch (error) {
           if (error.response) {

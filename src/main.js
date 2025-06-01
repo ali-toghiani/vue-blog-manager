@@ -4,13 +4,14 @@ import Vue3Toastify from 'vue3-toastify';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import apiClient from './api';
 
 // Styles Imports
 import './assets/tailwind.css';
 import './assets/fonts.css';
 import 'vue3-toastify/dist/index.css';
 
-createApp(App)
+const app = createApp(App)
   .use(store)
   .use(router)
   .use(Vue3Toastify, {
@@ -20,4 +21,7 @@ createApp(App)
     icon: false,
     closeButton: false,
   })
-  .mount('#app');
+
+  app.config.globalProperties.$http = apiClient;
+  
+  app.mount('#app');

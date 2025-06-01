@@ -116,11 +116,9 @@
 </template>
 
 <script>
-  import { computed, onMounted, ref } from 'vue';
+  import { computed, onMounted, ref, getCurrentInstance } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { useStore } from 'vuex';
   import { toast } from 'vue3-toastify';
-  import axios from 'axios';
 
   import AppButton from '@/components/AppButton.vue';
   import AppLinkButton from '@/components/AppLinkButton.vue';
@@ -145,7 +143,9 @@
       DotsIcon,
     },
     setup() {
-      const store = useStore();
+      const { appContext } = getCurrentInstance();
+      const $http = appContext.config.globalProperties.$http;
+
       const router = useRouter();
       const route = useRoute();
 
@@ -188,16 +188,8 @@
         try {
           isLoading.value = true;
           error.value = null;
-          const response = await axios.get(
-            `${store.getters.baseApi}/articles`,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Token ${store.getters.token}`,
-              },
-            }
-          );
+          const response = await $http.get(`/articles`);
+
           articles.value = response.data.articles || response.data || [];
           articlesCount.value = response.data.articlesCount;
           return { success: true, data: response.data };
@@ -214,16 +206,7 @@
       function handleDelete() {
         deleteIsLoading.value = true;
         try {
-          const response = axios.delete(
-            `${store.getters.baseApi}/articles/${itemToDelete.value}`,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Token ${store.getters.token}`,
-              },
-            }
-          );
+          const response = $http.delete(`/articles/${itemToDelete.value}`);
           toast.success('Article Deleted Successfully!');
           fetchArticles();
           closeDeleteModal();

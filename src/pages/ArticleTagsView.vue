@@ -43,9 +43,7 @@
   import AppCheckbox from '@/components/AppCheckbox.vue';
   import AppFormField from '@/components/AppFormField.vue';
 
-  import axios from 'axios';
-  import { computed, onMounted, onUpdated, ref, watch } from 'vue';
-  import { useStore } from 'vuex';
+  import { computed, onMounted, onUpdated, ref, watch, getCurrentInstance } from 'vue';
 
   export default {
     name: 'app-article-tags-view',
@@ -66,8 +64,10 @@
     },
 
     setup(props, context) {
+      const { appContext } = getCurrentInstance();
+      const $http = appContext.config.globalProperties.$http;
+
       const isLoading = ref(false);
-      const store = useStore();
 
       const newTag = ref('');
       const tagError = ref('');
@@ -102,13 +102,7 @@
       async function fetchTags() {
         try {
           isLoading.value = true;
-          const response = await axios.get(`${store.getters.baseApi}/tags`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Requested-With': 'XMLHttpRequest',
-              Authorization: `Token ${store.getters.token}`,
-            },
-          });
+          const response = await $http.get(`/tags`);
           tagList.value = response.data.tags;
           return { success: true, response: response.data };
         } catch (error) {

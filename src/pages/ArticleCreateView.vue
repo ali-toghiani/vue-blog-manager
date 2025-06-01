@@ -71,10 +71,8 @@
 </template>
 
 <script>
-  import { reactive, ref, onMounted } from 'vue';
-  import { useStore } from 'vuex';
+  import { reactive, ref, onMounted, getCurrentInstance } from 'vue';
   import { toast } from 'vue3-toastify';
-  import axios from 'axios';
 
   import AppButton from '@/components/AppButton.vue';
   import AppFormField from '@/components/AppFormField.vue';
@@ -97,8 +95,10 @@
       }
     },
     setup(props) {
+      const { appContext } = getCurrentInstance();
+      const $http = appContext.config.globalProperties.$http;
+
       const isLoading = ref(false);
-      const store = useStore();
 
       const form = reactive({
         title: '',
@@ -127,11 +127,8 @@
       async function fetchArticle(slug){
         isLoading.value = true;
         try{
-          const response = await axios.get(`${store.getters.baseApi}/articles/${slug}`,{
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Token ${store.getters.token}`,
-              })
+          const response = await $http.get(`/articles/${slug}`);
+
               Object.assign(form, response.data.article);
               initialTags.value = [...response.data.article.tagList];
               return {success: true, data: response.data};
@@ -165,19 +162,8 @@
       async function editArticle(slug){
         try {
           isLoading.value = true;
-          const response = await axios.put(
-            `${store.getters.baseApi}/articles/${slug}`,
-            {
-              article: form,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Token ${store.getters.token}`,
-              },
-            }
-          );
+          const response = await $http.put(`/articles/${slug}`,{ article: form });
+
           toast.success('Article Edited Successfully!');
           resetForm();
           return { success: true, data: response.data };
@@ -201,19 +187,7 @@
         }
         try {
           isLoading.value = true;
-          const response = await axios.post(
-            `${store.getters.baseApi}/articles`,
-            {
-              article: form,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Token ${store.getters.token}`,
-              },
-            }
-          );
+          const response = await $http.post(`/articles`, { article: form });
           toast.success('Article Created Successfully!');
           resetForm();
           return { success: true, data: response.data };
