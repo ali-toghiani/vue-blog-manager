@@ -31,15 +31,16 @@
     &-container {
       background-color: transparent !important;
       width: fit-content !important;
-      border-radius: 12px !important;
     }
     &--success {
       background: #e3f6e9 !important;
       color: #17b24a !important;
+      border-radius: 12px !important;
     }
     &--error {
       background: #FAE4E4 !important;
       color: #D61E20 !important;
+      border-radius: 12px !important;
     }
   }
 </style>
