@@ -29,14 +29,12 @@ const routes = [
         name: 'Articles',
         component: ArticlesView,
         props: { pageId: 1 },
-        // meta: { requiresAuth: true }
       },
       {
         path: 'page/:pageId',
         name: 'ArticlesPaginated',
         component: ArticlesView,
         props: true,
-        // meta: { requiresAuth: true }
       },
       {
         path: 'create',
