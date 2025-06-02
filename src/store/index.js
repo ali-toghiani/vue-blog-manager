@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import router from '@/router/index';
 
 export default createStore({
   state: () => ({
@@ -17,10 +18,10 @@ export default createStore({
           state.user = localUser;
         }
       }
-      return state.user.token;
+      return state.user?.token;
     },
     userName(state) {
-      return state.user.username;
+      return state.user?.username;
     },
   },
   mutations: {
@@ -29,8 +30,10 @@ export default createStore({
       context.user = payload;
     },
     clearUser(context) {
+      localStorage.removeItem('token');
       localStorage.removeItem('user');
       context.user = null;
+      router.push('/login');
     },
   },
   actions: {},
