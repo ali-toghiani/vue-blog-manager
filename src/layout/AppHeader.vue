@@ -27,7 +27,6 @@
 
 <script>
   import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
   import { useStore } from 'vuex';
 
   import AppButton from '@/components/AppButton.vue';
@@ -39,12 +38,10 @@
     },
     setup() {
       const store = useStore();
-      const router = useRouter();
       const userName = ref(store.getters.userName);
 
       function handleLogout() {
-        store.commit('clear-user');
-        router.push('/login');
+        store.commit('clearUser');
       }
       return {
         userName,

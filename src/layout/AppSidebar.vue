@@ -93,7 +93,6 @@
 
 <script>
   import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
   import { useStore } from 'vuex';
 
   export default {
@@ -101,7 +100,6 @@
     components: {},
     setup() {
       const store = useStore();
-      const router = useRouter();
       const userName = ref(store.getters.userName);
       const sidebarItems = ref([
         {
@@ -117,8 +115,7 @@
       const isOpen = ref(false);
 
       function handleLogout() {
-        store.commit('clear-user');
-        router.push('/login');
+        store.commit('clearUser');
       }
 
       return {
