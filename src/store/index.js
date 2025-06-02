@@ -30,7 +30,6 @@ export default createStore({
       context.user = payload;
     },
     clearUser(context) {
-      localStorage.removeItem('token');
       localStorage.removeItem('user');
       context.user = null;
       router.push('/login');
