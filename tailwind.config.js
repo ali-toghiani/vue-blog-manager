@@ -57,6 +57,9 @@ module.exports = {
         md: '8px',
         lg: '10px',
         xl: '12px'
+      },
+      fontSize: {
+        base: '14px'
       }
     },
   },
