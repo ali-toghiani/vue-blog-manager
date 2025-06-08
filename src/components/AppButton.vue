@@ -100,6 +100,7 @@
   }
 
   .spinner svg {
+    fill: white;
     animation: spin 1s linear infinite;
   }
   @keyframes spin {
