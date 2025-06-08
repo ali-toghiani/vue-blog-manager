@@ -4,72 +4,56 @@
     title="All Posts"
   >
     <div class="table-container p-6 flex flex-col items-end overflow-x-auto">
+
       <!-- Desktop table -->
-      <table class="article-table w-full hidden md:table">
-        <thead>
-          <tr class="bg-gray-300 h-[40px] py-1">
-            <th>#</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Tags</th>
-            <th>Excerpt</th>
-            <th>Created</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class="h-[48px] border-b"
-            v-for="(article, index) in paginatedArticles"
-            :key="index"
+      <app-table
+        :list="paginatedArticles"
+        :headers="['#', 'Title', 'Author', 'Tags', 'Excerpt', 'Created', '']"
+        #default="slotProps"
+        :loading="isLoading"
+      >
+        <td>
+          <div
+            class="order-container rounded-sm bg-gray-100 w-[32px] h-[32px] ms-1 flex justify-center items-center"
           >
-            <td>
-              <div
-                class="order-container rounded-sm bg-gray-100 w-[32px] h-[32px] ms-1 flex justify-center items-center"
-              >
-                {{ index + 1 }}
-              </div>
-            </td>
-            <td
-              class="title-cell"
-              :title="article.title || 'No title'"
+            {{ slotProps.index + 1 }}
+          </div>
+        </td>
+        <td class="title-cell">
+          <strong class="truncate">{{ slotProps.row.title }}</strong>
+        </td>
+        <td>
+          {{ slotProps.row.author.username }}
+        </td>
+        <td>
+          <app-link-button
+            v-for="tag in slotProps.row.tagList"
+            :key="tag"
+            :path="'/articles?=' + tag"
+          >
+            #{{ tag }}
+          </app-link-button>
+        </td>
+        <td>
+          {{ formatBody(slotProps.row.body) }}
+        </td>
+        <td>{{ formatDate(slotProps.row.createdAt) }}</td>
+        <td>
+          <div class="dropdown">
+            <app-button
+              color="transparent"
+              class="!w-[40px] !h-[40px] !p-[10px]"
             >
-              <strong class="truncate">{{ article.title }}</strong>
-            </td>
-            <td>
-              {{ article.author.username }}
-            </td>
-            <td>
-              <app-link-button
-                v-for="tag in article.tagList"
-                :key="tag"
-                :path="'/articles?=' + tag"
-              >
-                #{{ tag }}
-              </app-link-button>
-            </td>
-            <td>
-              {{ formatBody(article.body) }}
-            </td>
-            <td>{{ formatDate(article.createdAt) }}</td>
-            <td>
-              <div class="dropdown">
-                <app-button
-                  color="transparent"
-                  class="!w-[40px] !h-[40px] !p-[10px]"
-                >
-                  <dots-icon />
-                </app-button>
-                <app-menu
-                  @select="handleMenuClick($event, article.slug)"
-                  class="dropdown-content"
-                  :items="contextMenuItems"
-                ></app-menu>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              <dots-icon />
+            </app-button>
+            <app-menu
+              @select="handleMenuClick($event, slotProps.row.slug)"
+              class="dropdown-content"
+              :items="contextMenuItems"
+            ></app-menu>
+          </div>
+        </td>
+      </app-table>
 
       <!-- Mobile table -->
       <div class="md:hidden space-y-4 p-4">
@@ -134,7 +118,7 @@
         </div>
       </div>
 
-      <app-pagination 
+      <app-pagination
         v-if="articlesCount > articlePageSize"
         class="mt-6"
         @pageChanged="handlePageChange"
@@ -195,6 +179,7 @@
   import AppModal from '@/components/AppModal.vue';
   import AppPagination from '@/components/AppPagination.vue';
   import AppWidget from '@/components/AppWidget.vue';
+  import AppTable from '@/components/AppTable.vue';
 
   import WarningIcon from '@/assets/icons/WarningIcon.vue';
   import DotsIcon from '@/assets/icons/DotsIcon.vue';
@@ -208,6 +193,7 @@
       AppPagination,
       AppWidget,
       AppModal,
+      AppTable,
       WarningIcon,
       DotsIcon,
     },
@@ -236,7 +222,7 @@
       });
       const articles = ref([]);
       const articlesCount = ref(10);
-      const articlePageSize = ref(2);
+      const articlePageSize = ref(5);
 
       const isLoading = ref(false);
       const error = ref(null);
@@ -369,10 +355,6 @@
 </script>
 
 <style scoped>
-  th {
-    @apply text-[18px] font-semibold px-[18px] text-start;
-  }
-
   .title-cell {
     @apply max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap;
   }
