@@ -71,6 +71,6 @@
 
   .field-input-container--error :deep(input),
   .field-input-container--error :deep(textarea) {
-    @apply outline-[2px] !outline-red-500;
+    @apply border-[2px] !border-red-500;
   }
 </style>
