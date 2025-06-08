@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkvue_blog_manager"]=self["webpackChunkvue_blog_manager"]||[]).push([[276],{8276:function(n,u,e){e.r(u),e.d(u,{default:function(){return l}});var r=e(6768);function a(n,u){return(0,r.uX)(),(0,r.CE)("h1",null,"404 Not Found")}var t=e(1241);const o={},c=(0,t.A)(o,[["render",a]]);var l=c}}]);
-//# sourceMappingURL=276.5a07b8a9.js.map
