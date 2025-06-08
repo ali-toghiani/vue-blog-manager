@@ -16,13 +16,13 @@
           <div
             class="order-container rounded-sm bg-gray-100 w-[32px] h-[32px] ms-1 flex justify-center items-center"
           >
-            {{ slotProps.index + 1 }}
+            {{ (+pageId -1)*articlePageSize  + slotProps.index + 1 }}
           </div>
         </td>
         <td class="title-cell">
           <strong class="truncate">{{ slotProps.row.title }}</strong>
         </td>
-        <td>
+        <td class="whitespace-nowrap">
           {{ slotProps.row.author.username }}
         </td>
         <td>
@@ -37,7 +37,7 @@
         <td>
           {{ formatBody(slotProps.row.body) }}
         </td>
-        <td>{{ formatDate(slotProps.row.createdAt) }}</td>
+        <td class=" whitespace-nowrap">{{ formatDate(slotProps.row.createdAt) }}</td>
         <td>
           <div class="dropdown">
             <app-button
@@ -170,7 +170,7 @@
 
 <script>
   import { computed, onMounted, ref, getCurrentInstance } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
+  import { useRouter } from 'vue-router';
   import { toast } from 'vue3-toastify';
 
   import AppButton from '@/components/AppButton.vue';
@@ -186,6 +186,12 @@
 
   export default {
     name: 'app-articles-view',
+    props: {
+      pageId: {
+        type: String,
+        default: '1',
+      },
+    },
     components: {
       AppButton,
       AppLinkButton,
@@ -197,19 +203,17 @@
       WarningIcon,
       DotsIcon,
     },
-    setup() {
+    setup(props) {
       const { appContext } = getCurrentInstance();
       const $http = appContext.config.globalProperties.$http;
 
       const router = useRouter();
-      const route = useRoute();
 
       const currentPage = computed(() => {
-        const pageId = parseInt(route.params.pageId) || 1;
         return Math.max(
           1,
           Math.min(
-            pageId,
+            +(props.pageId) || 1,
             Math.ceil(articlesCount.value / articlePageSize.value)
           )
         );
