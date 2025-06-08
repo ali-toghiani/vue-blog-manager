@@ -134,7 +134,8 @@
         </div>
       </div>
 
-      <app-pagination
+      <app-pagination 
+        v-if="articlesCount > articlePageSize"
         class="mt-6"
         @pageChanged="handlePageChange"
         :page-size="articlePageSize"
