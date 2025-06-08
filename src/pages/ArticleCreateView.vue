@@ -34,6 +34,7 @@
             class="text-[14px]"
             type="text"
             id="description"
+            :disabled="isLoading"
             placeholder="Description"
             v-model="form.description"
             @blur="validateForm"
@@ -51,6 +52,7 @@
             rows="5"
             type="text"
             id="body"
+            :disabled="isLoading"
             v-model="form.body"
             @blur="validateForm"
           ></textarea>

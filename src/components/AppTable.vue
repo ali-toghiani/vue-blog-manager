@@ -1,5 +1,5 @@
 <template>
-  <table class="article-table w-full hidden md:table">
+  <table class="article-table w-full hidden md:table text-start text-base">
     <thead>
       <tr class="bg-gray-300 h-[40px] py-1">
         <th
@@ -78,8 +78,21 @@ import SpinnerIcon from '@/assets/icons/SpinnerIcon.vue';
 </script>
 
 <style scoped>
+table
   th {
-    @apply text-[18px] font-semibold px-[18px] text-start;
+    @apply text-[18px] font-semibold text-start;
+    &:first-child{
+      @apply px-4;
+    }
+    &:last-child{
+      @apply px-4
+    }
+  }
+  tbody tr:deep(td) {
+    @apply px-2;
+    &:first-child{
+      @apply ps-0;
+    }
   }
   .spinner {
     animation: spin 1s linear infinite;
