@@ -74,6 +74,7 @@
   import { reactive, ref, getCurrentInstance } from 'vue';
   import { useRouter } from 'vue-router';
   import { useStore } from 'vuex';
+  import { toast } from 'vue3-toastify';
 
   import AppButton from '@/components/AppButton.vue';
   import AppFormField from '@/components/AppFormField.vue';
@@ -146,9 +147,12 @@
         try {
           const response = await registerUser(form);
           if (response.success) {
-            store.commit('setUser', response.data.user);
+            const { user } = response.data;
+            store.commit('setUser', user);
+            toast.success(`Welcome ${user.username}`);
             router.push('/articles');
           } else {
+            toast.error('Email or Password is Invalid');
             Object.assign(errors, response.errors);
           }
         } catch (error) {
