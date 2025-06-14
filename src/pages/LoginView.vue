@@ -18,8 +18,10 @@
           @blur="validateForm"
         >
           <input
+            autocomplete="email"
             type="email"
             id="email"
+            name="email"
             placeholder="sample text"
             v-model="form.email"
           />
@@ -31,8 +33,10 @@
           :error="errors.password"
         >
           <input
+            autocomplete="current-password"
             type="password"
             id="password"
+            name="current-password"
             placeholder="sample text"
             v-model="form.password"
             @blur="validateForm"
