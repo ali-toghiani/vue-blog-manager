@@ -65,7 +65,7 @@
           >
             <router-link
               :to="item.link"
-              class="w-full mb-1 p-2 text-[16px] text-semibold"
+              :class="['w-full mb-1 p-2 text-[16px] text-semibold', item.names.includes(currentPath) ? 'active-link' : '']"
               @click="isOpen = false"
             >
               {{ item.title }}
@@ -92,7 +92,8 @@
 </template>
 
 <script>
-  import { ref } from 'vue';
+  import { onMounted, ref } from 'vue';
+  import { useRouter } from 'vue-router';
   import { useStore } from 'vuex';
 
   export default {
@@ -100,15 +101,20 @@
     components: {},
     setup() {
       const store = useStore();
+      const router = useRouter();
+      
+      const currentPath = ref('');
       const userName = ref(store.getters.userName);
       const sidebarItems = ref([
         {
           title: 'All Articles',
           link: '/articles',
+          names: ['Articles', 'ArticlesPaginated']
         },
         {
           title: 'New Article',
           link: '/articles/create',
+          names: ['Create']
         },
       ]);
 
@@ -118,18 +124,29 @@
         store.commit('clearUser');
       }
 
+      onMounted(()=>{
+        // Set currentPath initially
+        currentPath.value = router.currentRoute.value.name;
+
+        // Update currentPath after changes
+        router.afterEach((to)=>{
+        currentPath.value = to.name;
+      })
+      })
+
       return {
         sidebarItems,
         isOpen,
         userName,
-        handleLogout,
+        currentPath,
+        handleLogout
       };
     },
   };
 </script>
 
 <style scoped>
-  .router-link-exact-active {
+  .active-link {
     @apply text-green-300 bg-green-50;
   }
 
