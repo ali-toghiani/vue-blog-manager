@@ -39,7 +39,8 @@ module.exports = {
           600: '#7F7F7F',
           700: '#616161',
         },
-        white: '#FFFFFF'
+        white: '#FFFFFF',
+        'golden-state': '#FFAB00'
       },
       spacing: {
         1: '4px',
