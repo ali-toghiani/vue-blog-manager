@@ -139,10 +139,10 @@
         <div
           class="circle w-[56px] h-[56px] bg-red-50 rounded-full flex justify-center items-center"
         >
-          <warning-icon class="fill-red-500 w-6 h-6"/>
+          <warning-icon class="fill-red-300 w-6 h-6"/>
         </div>
         <p class="text-[14px] text-center">
-          Are you sure you want to delete this article
+          Are you sure you want to delete this article?
         </p>
       </div>
     </template>
