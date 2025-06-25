@@ -150,7 +150,7 @@
             const { user } = response.data;
             store.commit('setUser', user);
             toast.success(`Welcome ${user.username}`);
-            router.push('/articles');
+            router.replace('/articles');
           } else {
             toast.error('Email or Password is Invalid');
             Object.assign(errors, response.errors);
