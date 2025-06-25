@@ -159,7 +159,6 @@
         Delete
       </app-button>
       <app-button
-        :disabled="deleteIsLoading"
         class="!w-fit"
         color="transparent"
         @click="closeDeleteModal"
@@ -283,7 +282,7 @@
         } catch (error) {
           if (error.response) {
             toast.error(error.response.data.message);
-            // deleteIsLoading.value = false;
+            deleteIsLoading.value = false;
             return { success: false, errors: error.response.data.errors || {} };
           }
           return {
