@@ -6,9 +6,9 @@
     <slot></slot>
     <div
       v-if="loading"
-      class="spinner mx-[10px]"
+      class="spinner w-[15px] h-[15px]"
     >
-      <spinner-icon />
+      <spinner-icon class=""/>
     </div>
   </button>
 </template>
@@ -47,8 +47,7 @@
       const buttonClasses = computed(() => ({
         button: true,
         [`button-${props.color}`]: true,
-        [`button-${props.color}-${props.shade}`]:
-          props.color !== 'black-outline' && !props.disabled,
+        [`button-${props.color}-${props.shade}`]: props.color !== 'black-outline',
         'button--disabled': props.disabled,
         'button--loading': props.loading,
         'button-black-outline':
@@ -63,7 +62,7 @@
 
 <style lang="postcss" scoped>
   .button {
-    @apply inline-block px-4 py-2 rounded-lg font-semibold text-[14px] w-full flex justify-center items-center;
+    @apply px-4 py-2 rounded-lg font-semibold text-[14px] w-full flex justify-center items-center gap-[10px];
   }
   .button-green {
     @apply h-[40px] text-white;
@@ -93,10 +92,10 @@
     @apply bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100;
   }
   .button--disabled {
-    @apply bg-gray-100 text-gray-300 cursor-not-allowed;
+    @apply bg-opacity-40 cursor-not-allowed;
   }
   .button--loading {
-    @apply bg-green-100 cursor-wait !important;
+    @apply bg-opacity-40 cursor-wait !important;
   }
 
   .spinner svg {
