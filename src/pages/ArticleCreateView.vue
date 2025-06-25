@@ -179,7 +179,7 @@
           router.push('/articles');
           return { success: true, data: response.data };
         } catch (error) {
-          toast.success('Article Edit Failed!');
+          toast.error(error.response.data.message);
           if (error.response) {
             return { success: false, errors: error.response.data.errors || {} };
           }
@@ -204,7 +204,7 @@
           router.push('/articles');
           return { success: true, data: response.data };
         } catch (error) {
-          toast.success('Article Creation Failed!');
+          toast.error(error.response.data.message);
           if (error.response) {
             return { success: false, errors: error.response.data.errors || {} };
           }
