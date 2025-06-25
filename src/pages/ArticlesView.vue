@@ -130,7 +130,7 @@
   </app-widget>
   <app-modal
     title="Delete"
-    @delete="handleDelete"
+    @close="handleDelete"
     v-if="showDeleteModal"
   >
     <template #default>
@@ -153,7 +153,8 @@
         :loading="deleteIsLoading"
         class="!w-fit text-[14px] font-semibold"
         color="red"
-        @click="handleDelete"
+        shade="base"
+        @click="handleDelete(true)"
       >
         Delete
       </app-button>
@@ -265,7 +266,11 @@
         }
       }
 
-      async function handleDelete() {
+      async function handleDelete(confirmed = false) {
+        if(!confirmed){
+          closeDeleteModal();
+          return;
+        }
         deleteIsLoading.value = true;
         try {
           const response = await $http.delete(
@@ -278,15 +283,13 @@
         } catch (error) {
           if (error.response) {
             toast.error(error.response.data.message);
-            deleteIsLoading.value = false;
+            // deleteIsLoading.value = false;
             return { success: false, errors: error.response.data.errors || {} };
           }
           return {
             success: false,
             errors: { general: 'An unexpected error occurred' },
           };
-        } finally {
-          isLoading.value = false;
         }
       }
 

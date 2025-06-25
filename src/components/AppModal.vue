@@ -41,13 +41,15 @@
         required: false,
       },
     },
+    emits: ['close'],
     components: {
       AppButton,
     },
-    setup() {
+    setup(props,context) {
       const isOpen = ref(true);
 
       function handleClose() {
+        context.emit('close');
         isOpen.value = false;
       }
 
