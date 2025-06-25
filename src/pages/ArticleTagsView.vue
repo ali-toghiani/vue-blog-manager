@@ -94,7 +94,6 @@
       );
 
       watch(props.initialTags, () => {
-        console.log('**', props.initialTags);
         tagList.value = [...props.initialTags];
         selectedTags.value = [...props.initialTags];
       });
