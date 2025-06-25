@@ -8,7 +8,7 @@
       v-if="loading"
       class="spinner w-[15px] h-[15px]"
     >
-      <spinner-icon class=""/>
+      <spinner-icon class="fill-white"/>
     </div>
   </button>
 </template>
@@ -96,18 +96,5 @@
   }
   .button--loading {
     @apply bg-opacity-40 cursor-wait !important;
-  }
-
-  .spinner svg {
-    fill: white;
-    animation: spin 1s linear infinite;
-  }
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
   }
 </style>
