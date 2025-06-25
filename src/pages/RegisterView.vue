@@ -95,6 +95,7 @@
       const router = useRouter();
       const isLoading = ref(false);
 
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const form = reactive({
         username: '',
         email: '',
@@ -118,6 +119,10 @@
         }
         if (!form.email) {
           errors.email = 'Email is required!';
+          isValid = false;
+        }
+        if (!emailRegex.test(form.email)) {
+          errors.email = 'Please enter a valid email address';
           isValid = false;
         }
         if (!form.password) {
