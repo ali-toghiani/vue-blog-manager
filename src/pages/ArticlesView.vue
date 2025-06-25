@@ -4,7 +4,6 @@
     title="All Posts"
   >
     <div class="table-container p-6 flex flex-col items-end overflow-x-auto">
-
       <!-- Desktop table -->
       <app-table
         :list="paginatedArticles"
@@ -16,7 +15,7 @@
           <div
             class="order-container rounded-sm bg-gray-100 w-[32px] h-[32px] ms-1 flex justify-center items-center"
           >
-            {{ (+pageId -1)*articlePageSize  + slotProps.index + 1 }}
+            {{ (+pageId - 1) * articlePageSize + slotProps.index + 1 }}
           </div>
         </td>
         <td class="title-cell">
@@ -37,7 +36,9 @@
         <td>
           {{ formatBody(slotProps.row.body) }}
         </td>
-        <td class=" whitespace-nowrap">{{ formatDate(slotProps.row.createdAt) }}</td>
+        <td class="whitespace-nowrap">
+          {{ formatDate(slotProps.row.createdAt) }}
+        </td>
         <td>
           <div class="dropdown">
             <app-button
@@ -139,7 +140,7 @@
         <div
           class="circle w-[56px] h-[56px] bg-red-50 rounded-full flex justify-center items-center"
         >
-          <warning-icon class="fill-red-300 w-6 h-6"/>
+          <warning-icon class="fill-red-300 w-6 h-6" />
         </div>
         <p class="text-[14px] text-center">
           Are you sure you want to delete this article?
@@ -213,7 +214,7 @@
         return Math.max(
           1,
           Math.min(
-            +(props.pageId) || 1,
+            +props.pageId || 1,
             Math.ceil(articlesCount.value / articlePageSize.value)
           )
         );
@@ -264,19 +265,26 @@
         }
       }
 
-      function handleDelete() {
+      async function handleDelete() {
         deleteIsLoading.value = true;
         try {
-          const response = $http.delete(`/articles/${itemToDelete.value}`);
+          const response = await $http.delete(
+            `/articles/${itemToDelete.value}`
+          );
           toast.success('Article Deleted Successfully!');
           fetchArticles();
           closeDeleteModal();
           return { success: true, data: response.data };
         } catch (error) {
           if (error.response) {
+            toast.error(error.response.data.message);
+            deleteIsLoading.value = false;
             return { success: false, errors: error.response.data.errors || {} };
           }
-          throw new Error('Article Deletion Failed');
+          return {
+            success: false,
+            errors: { general: 'An unexpected error occurred' },
+          };
         } finally {
           isLoading.value = false;
         }
@@ -284,6 +292,7 @@
 
       function closeDeleteModal() {
         showDeleteModal.value = false;
+        deleteIsLoading.value = false;
         itemToDelete.value = '';
       }
 
