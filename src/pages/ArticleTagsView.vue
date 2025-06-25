@@ -72,19 +72,14 @@
       const newTag = ref('');
       const tagError = ref('');
       const tagList = ref([]);
+      const selectedTags = ref([]);
+
       const sortedTags = computed(() => {
         return [...tagList.value].sort();
       });
-      const selectedTags = ref([]);
 
-      const updateTag = (tag, isChecked) => {
-        if (isChecked) {
-          selectedTags.value = [...selectedTags.value, tag];
-        } else {
-          selectedTags.value = selectedTags.value.filter((t) => t !== tag);
-        }
-      };
 
+      // Emit Selected Tags to parent
       watch(
         selectedTags,
         (newTags) => {
@@ -93,10 +88,32 @@
         { deep: true }
       );
 
+      // Update selected tags in Edit mode
       watch(props.initialTags, () => {
         tagList.value = [...props.initialTags];
         selectedTags.value = [...props.initialTags];
       });
+
+      onMounted(() => {
+        if (!props.isEditing && props.initialTags.length === 0) {
+          fetchTags();
+        }
+      });
+
+      onUpdated(() => {
+        if (tagList.value.length == 0 && props.initialTags.length > 0) {
+          tagList.value = [...props.initialTags];
+          selectedTags.value = [...props.initialTags];
+        }
+      });
+
+      const updateTag = (tag, isChecked) => {
+        if (isChecked) {
+          selectedTags.value = [...selectedTags.value, tag];
+        } else {
+          selectedTags.value = selectedTags.value.filter((t) => t !== tag);
+        }
+      };
 
       async function fetchTags() {
         try {
@@ -135,18 +152,6 @@
         }
       }
 
-      onMounted(() => {
-        if (!props.isEditing && props.initialTags.length === 0) {
-          fetchTags();
-        }
-      });
-
-      onUpdated(() => {
-        if (tagList.value.length == 0) {
-          tagList.value = [...props.initialTags];
-          selectedTags.value = [...props.initialTags];
-        }
-      });
       return {
         newTag,
         tagError,

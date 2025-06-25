@@ -78,6 +78,7 @@
 
 <script>
   import { reactive, ref, onMounted, getCurrentInstance } from 'vue';
+  import { useRouter } from 'vue-router';
   import { toast } from 'vue3-toastify';
 
   import AppButton from '@/components/AppButton.vue';
@@ -103,6 +104,7 @@
     setup(props) {
       const { appContext } = getCurrentInstance();
       const $http = appContext.config.globalProperties.$http;
+      const router = useRouter();
 
       const isLoading = ref(false);
 
@@ -174,6 +176,7 @@
 
           toast.success('Article Edited Successfully!');
           resetForm();
+          router.push('/articles');
           return { success: true, data: response.data };
         } catch (error) {
           toast.success('Article Edit Failed!');
@@ -198,6 +201,7 @@
           const response = await $http.post(`/articles`, { article: form });
           toast.success('Article Created Successfully!');
           resetForm();
+          router.push('/articles');
           return { success: true, data: response.data };
         } catch (error) {
           toast.success('Article Creation Failed!');
