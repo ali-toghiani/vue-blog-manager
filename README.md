@@ -2,6 +2,18 @@
 
 A modern blog management system built with Vue.js 3 and TypeScript, featuring a clean and intuitive interface for managing blog posts. This application provides a robust platform for creating, editing, and managing blog content with user authentication.
 
+## Live Demo
+
+Check out the live demo of the application [here](https://ali-toghiani.github.io/vue-blog-manager/).
+
+## Screenshots
+
+Below are some screenshots of the application in action:
+
+![Screenshot 1](src/assets/screenshots/vue-blogs-list.png)
+![Screenshot 2](src/assets/screenshots/vue-create-blog.png)
+
+
 ## Features
 
 - **User Authentication**
