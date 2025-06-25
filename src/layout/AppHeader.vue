@@ -10,7 +10,7 @@
       </strong>
     </div>
     <div class="text-[16px] font-semibold py-2 px-3 bg-gray-100 rounded-sm">
-      Arvancloud Challenge
+      Vue Blog Manager
     </div>
 
       <span class="hidden md:block">
