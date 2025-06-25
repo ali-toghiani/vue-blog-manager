@@ -48,7 +48,7 @@ const routes = [
         path: 'edit/:slug',
         name: 'Edit',
         component: () => import('../pages/ArticleCreateView.vue'),
-        props: (route) => ({
+        props: (route: any) => ({
           isEditing: true,
           slug: route.params.slug
         })

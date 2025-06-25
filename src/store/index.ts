@@ -1,8 +1,14 @@
 import { createStore } from 'vuex';
 import router from '@/router/index';
+import { UserModel } from '@/models/user.model';
+
+interface State {
+  baseApi: string
+  user: UserModel | null
+}
 
 export default createStore({
-  state: () => ({
+  state: (): State => ({
     baseApi: process.env.VUE_APP_BASE_API_URL,
     user: null,
   }),
@@ -13,15 +19,15 @@ export default createStore({
     token(state) {
       if (!state.user) {
         const localUserRaw = localStorage.getItem('user');
-        const localUser = JSON.parse(localUserRaw);
+        const localUser: UserModel = JSON.parse(<string>localUserRaw);
         if (localUser) {
           state.user = localUser;
         }
       }
-      return state.user?.token;
+      return  (<UserModel>state.user).token;
     },
-    userName(state) {
-      return state.user?.username;
+    userName(state): string {
+      return (<UserModel>state.user).username;
     },
   },
   mutations: {
