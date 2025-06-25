@@ -21,7 +21,7 @@
       </app-form-field>
     </form>
 
-    <ul class="tag-list border rounded-lg p-4">
+    <ul class="tag-list border rounded-lg p-4" v-if="sortedTags.length > 0">
       <li
         v-for="(tag, index) in sortedTags"
         :key="tag"
@@ -36,10 +36,20 @@
         />
       </li>
     </ul>
+    <div v-else-if="isEditing">
+      <span>You haven't created any Tags!</span>
+    </div>
+    <div v-else>
+      <div class="flex justify-center items-center gap-[10px] text-green-500">
+        <span>Fetching Tags</span> 
+        <spinner-icon class="spinner w-[20px] h-[20px] fill-green-500"/>
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
+  import SpinnerIcon from '@/assets/icons/SpinnerIcon.vue';
   import AppCheckbox from '@/components/AppCheckbox.vue';
   import AppFormField from '@/components/AppFormField.vue';
 
@@ -50,6 +60,7 @@
     components: {
       AppFormField,
       AppCheckbox,
+      SpinnerIcon
     },
     props: {
       initialTags: {
@@ -67,7 +78,7 @@
       const { appContext } = getCurrentInstance();
       const $http = appContext.config.globalProperties.$http;
 
-      const isLoading = ref(false);
+      const isLoading = ref(true);
 
       const newTag = ref('');
       const tagError = ref('');
